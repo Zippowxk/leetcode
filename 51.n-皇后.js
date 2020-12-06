@@ -25,28 +25,29 @@ var solveNQueens = function (n) {
             const yxMinus = y - x;
             if (xyAddMap[xyAdd] || yxMinusMap[yxMinus]) {
             } else {
-                const newRes = JSON.parse(JSON.stringify(res));
-                newRes[x][y] = 'Q';
+                // const newRes = JSON.parse(JSON.stringify(res));
+                // newRes[x][y] = 'Q';
 
+                res[x][y] = 'Q';
                 if (x >= n - 1) {
                     console.log(xyAddMap)
                     console.log(xyAdd)
                     const newOne = []
-                    newRes.forEach(element => {
+                    res.forEach(element => {
                         newOne.push(element.join(''));
                     });
                     returnArr.push(newOne);
+                    res[x][y] = '.';
                 } else {
-                    const newxy = JSON.parse(JSON.stringify(xyAddMap));
-                    const newyx = JSON.parse(JSON.stringify(yxMinusMap));
-                    const avaliableY = JSON.parse(JSON.stringify(avaliableYMap));
-                    newxy[`${xyAdd}`] = true;
-                    newyx[`${yxMinus}`] = true;
-                    delete avaliableY[`${y}`]
-                    if (x == 3 && y == 2) {
-                        console.log(newyx)
-                    }
-                    helper(newxy, newyx, avaliableY, x + 1, newRes);
+
+                    xyAddMap[`${xyAdd}`] = true;
+                    yxMinusMap[`${yxMinus}`] = true;
+                    delete avaliableYMap[`${y}`]
+                    helper(xyAddMap, yxMinusMap, avaliableYMap, x + 1, res);
+                    xyAddMap[`${xyAdd}`] = false;
+                    yxMinusMap[`${yxMinus}`] = false;
+                    avaliableYMap[`${y}`] = true;
+                    res[x][y] = '.';
                 }
 
             }
@@ -64,10 +65,11 @@ var solveNQueens = function (n) {
     }
 
     for (let y = 0; y < n; y++) {
+        
         const x = 0;
         const xyAdd = x + y;
         const yxMinus = y - x;
-        const avaliableY = JSON.parse(JSON.stringify(avaliableYMap));
+        const avaliableY = Object.assign({}, avaliableYMap);
         const newres = JSON.parse(JSON.stringify(res));
         delete avaliableY[`${y}`]
         const xyAddMap = {};
